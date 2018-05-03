@@ -1,26 +1,8 @@
-import { Template } from 'meteor/templating';
-import { ReactiveVar } from 'meteor/reactive-var';
+// Client entry point, imports all client code
 
-import './main.html';
+import '/imports/startup/client';
+import '/imports/startup/both';
 
-Template.hello.onCreated(function helloOnCreated() {
-  // counter starts at 0
-  this.counter = new ReactiveVar(0);
-
-  // var date = new Date();
-  // var newMoment = moment(date).format('YYYY/MM/DD HH:mm:ss:SS');
-  // Meteor.call("logToConsole",newMoment);
-});
-
-Template.hello.helpers({
-  counter() {
-    return Template.instance().counter.get();
-  },
-});
-
-Template.hello.events({
-  'click button'(event, instance) {
-    // increment the counter when button is clicked
-    instance.counter.set(instance.counter.get() + 1);
-  },
-});
+// var date = new Date();
+// var newMoment = moment(date).format('YYYY/MM/DD HH:mm:ss:SS');
+// Meteor.call("logToConsole",newMoment);
