@@ -7,6 +7,7 @@ const fs = require('fs');
 const readline = require('readline');
 
 LOGFILE = 'C:/Dale/findschoolclothes/output.log';
+PACKAGESFILE = 'C:/Dale/findschoolclothes/.meteor/packages';
 
 Meteor.startup(() => {
   // code to run on server at startup
@@ -28,17 +29,17 @@ _writeToLogFile = function () {
   const newDate = new Date();
   const momentDate = moment(newDate.toISOString()).format('YYYY/MM/DD HH:mm:ss:SS');
 
-  var serverStarted = "Finish: " + momentDate;
-  fs.appendFile( LOGFILE, serverStarted +" \n", Meteor.bindEnvironment((err) => {
+  var serverStartedTime = "Finish: " + momentDate;
+  fs.appendFile( LOGFILE, serverStartedTime +" \n", Meteor.bindEnvironment((err) => {
     if (err) throw err;
-    _calculateLoadTime(serverStarted)
+    _calculateLoadTime(serverStartedTime)
   }));
 
 
 
 }
 
-_calculateLoadTime = function(serverStarted){
+_calculateLoadTime = function(serverStartedTime){
   var lineReader = readline.createInterface({
     input: fs.createReadStream(LOGFILE, 'utf8')
   });
@@ -61,7 +62,7 @@ _calculateLoadTime = function(serverStarted){
     if(counter-1 == lastStartIndex){
       var startTimeString = startTags[startTags.length-1];
       var startDateOnly = startTimeString.substr(startTimeString.length - 22);
-      var endDateOnly = serverStarted.substr(serverStarted.length - 22);
+      var endDateOnly = serverStartedTime.substr(serverStartedTime.length - 22);
       var startDateTime = new Date(startDateOnly);
       var endDateTime = new Date(endDateOnly);
 
@@ -81,8 +82,37 @@ _calculateLoadTime = function(serverStarted){
       });
 
       var startTimeInfo = { start: startDateOnly, finished: endDateOnly, seconds: diffSeconds, minutes: diffMins };
-      Meteor.call('meteorStartTimes_Insert',startTimeInfo);
+
+      _readCurrentPackages(startTimeInfo);
     }
+  }));
+}
+
+_readCurrentPackages = function(startTimeInfo){
+  var lineReader = readline.createInterface({
+    input: fs.createReadStream(PACKAGESFILE, 'utf8')
+  });
+
+  var packages = [];
+
+  lineReader.on('line', function (line) {
+    var package = line.substr(0,line.indexOf(' '));
+    if(package && package.length !=0){
+      packages.push(package);
+    }
+  });
+
+  lineReader.on('close', Meteor.bindEnvironment(function () {
+      console.log("Debug Dale packages", packages );
+
+      fs.appendFile( LOGFILE, "Current Packages: " +packages +" \n", (err) => {
+        if (err) throw err;
+      });
+
+      startTimeInfo.packages = packages;
+
+      Meteor.call('meteorStartTimes_Insert',startTimeInfo);
+
   }));
 }
 
