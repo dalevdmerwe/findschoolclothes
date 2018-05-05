@@ -338,7 +338,7 @@
       <workItem from="1525269537019" duration="13449000" />
       <workItem from="1525329322767" duration="40000" />
       <workItem from="1525417567888" duration="258000" />
-      <workItem from="1525518059432" duration="7927000" />
+      <workItem from="1525518059432" duration="8220000" />
     </task>
     <task id="LOCAL-00001" summary="Mongo Insert">
       <created>1525525757358</created>
@@ -351,7 +351,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="21674000" />
+    <option name="totallyTimeSpent" value="21967000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
