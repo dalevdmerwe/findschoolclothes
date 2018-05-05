@@ -13,8 +13,7 @@ echo Start: %date% %time%
 )
 
 @echo on
-
 @echo %date% %time%
 
-meteor --port 3000
+REM meteor --port 3000
 
